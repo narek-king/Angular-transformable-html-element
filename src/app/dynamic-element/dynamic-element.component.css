@@ -1,0 +1,34 @@
+.element {
+  background-color: #0000FF;
+}
+.canvas {
+  width: 1500px;
+  height: 2000px;
+  border: 1px solid red;
+}
+.resize {
+  background: red;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.rotate {
+  border: solid 1px cyan;
+  border-radius: 30px;
+  margin-top: 10px;
+  width: 25px;
+  height: 20px;
+}
+
+.br {
+  left: calc(100% - 7px);
+  top: calc(100% - 7px);
+}
+.rotator {
+  top: -45px;
+  left: calc(50% - 7px);
+}
