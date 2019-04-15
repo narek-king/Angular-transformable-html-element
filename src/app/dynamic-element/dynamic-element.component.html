@@ -1,17 +1,7 @@
-<!--<div class="canvas" (mousemove)="handleMove($event)" (mouseup)="finishResize($event)">-->
-<!--<div class="element" [ngStyle]="style">-->
-  <!--<div class="resize" (mousedown)="handleResize($event)" (mouseup)="finishResize($event)">r</div>-->
-  <!--<div class="rotate" (mousedown)="handleRotation($event)" (mouseup)="finishResize($event)">Rot</div>-->
-<!--</div>-->
-
-<!--</div>-->
-
 <div>
-  <div class="element" [ngStyle]="elementStyle">
-
-  </div>
-  <div class="controls" [ngStyle]="controlsStyle" (mousedown)="onRotateHandleMouseDown($event)">
-  <div class="resize br" (mousedown)="onScaleHandleMouseDown($event)">r</div>
-  <div class="resize rotator" >R</div>
+  <div class="element" [ngStyle]="elementStyle"></div>
+  <div class="controls" [ngStyle]="controlsStyle">
+    <div class="bottom_right" (mousedown)="onScaleHandleMouseDown($event)"></div>
+    <div class="rotate" (mousedown)="onRotateHandleMouseDown($event)"></div>
   </div>
 </div>

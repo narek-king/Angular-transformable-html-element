@@ -1,4 +1,5 @@
-import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import {DynamicElement} from '../models';
 import {scale} from 'free-transform';
 import {styler} from 'free-transform';
 import {rotate} from 'free-transform';
@@ -10,34 +11,21 @@ import {rotate} from 'free-transform';
 })
 export class DynamicElementComponent implements OnInit {
 
-  style = {
-    height: '170px',
-    width: '300px',
-    marginTop: '200px',
-    marginLeft: '300px',
-    transform: 'rotate(0deg)'
-  };
-  element = {
+  element: DynamicElement = {
     x: 100,
     y: 100,
     scaleX: 1,
     scaleY: 1,
-    width: 100,
-    height: 100,
+    width: '300',
+    height: '150',
     angle: 0,
     scaleLimit: 0.1,
     disableScale: true
   };
-  controlsStyle = {};
-  elementStyle: any = null;
-  state: string = null;
-  startX: number = null;
-  startY: number = null;
-  currentAngle = 0;
-  onScale: () => void;
+  controlsStyle: DynamicElement = null;
+  elementStyle: DynamicElement = null;
 
-  constructor(public el: ElementRef,
-              public renderer: Renderer2) { }
+  constructor(public renderer: Renderer2) { }
 
   ngOnInit() {
     this.draw();
@@ -67,58 +55,26 @@ export class DynamicElementComponent implements OnInit {
     };
   }
 
-  handleResize(event) {
-    console.log('handling resize');
-    this.state = 'resize';
-    this.startX = event.clientX;
-    this.startY = event.clientY;
-  }
-  handleMove(event) {
-    if (this.state === 'resize') {
-      console.log('x', event.clientX, 'y', event.clientY);
-      let height = parseInt(this.style.height.slice(0, -2), 10);
-      let width = parseInt(this.style.width.slice(0, -2), 10);
-      height += event.clientY - this.startY;
-      width += event.clientX - this.startX;
-      this.style.height = `${height}px`;
-      this.style.width = `${width}px`;
-    } else if (this.state === 'rotating') {
-      this.style.transform = `rotate(${this.currentAngle++}deg)`;
-      console.log(this.style.transform);
-    }
-  }
-
-  handleRotation(event) {
-    this.state = 'rotating';
-    this.startX = event.clientX;
-    this.startY = event.clientY;
-  }
-
-  finishResize(event) {
-    this.state = null;
-  }
   onScaleHandleMouseDown(event) {
     event.stopPropagation();
     event.preventDefault();
-    const drag = scale('br', {
+
+    const onDrag = scale('br', {
       startX: event.pageX,
       startY: event.pageY,
       scaleFromCenter: event.altKey,
       aspectRatio: event.shiftKey,
       ...this.element,
-    }, (payload) => { // {x, y, scaleX, scaleY}
-      // dragging
+    }, (payload: DynamicElement) => {
       this.element = { ...this.element, ...payload };
       this.draw();
     });
 
-    const up = () => {
-      document.removeEventListener('mousemove', drag);
-      document.removeEventListener('mouseup', up);
-    };
-
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', up);
+    const onMove = this.renderer.listen('document', 'mousemove', onDrag);
+    const onUp = this.renderer.listen('document', 'mouseup', () => {
+      onMove();
+      onUp();
+    });
   }
 
   onRotateHandleMouseDown (event) {
@@ -126,25 +82,22 @@ export class DynamicElementComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
 
-    const drag = rotate({
+    const onRotate = rotate({
       startX: event.pageX,
       startY: event.pageY,
-      offsetX: 0, // the offset x of parent (parent.offsetLeft)
-      offsetY: 0, // the offset y of parent (parent.offsetTop)
+      offsetX: 0,
+      offsetY: 0,
       ...this.element,
-    }, (payload) => { // {angle}
-      // dragging
+    }, (payload: DynamicElement) => {
       this.element = { ...this.element, ...payload };
       this.draw();
     });
 
-    const up = () => {
-      document.removeEventListener('mousemove', drag);
-      document.removeEventListener('mouseup', up);
-    };
-
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', up);
+    const onMove = this.renderer.listen('document', 'mousemove', onRotate);
+    const onUp = this.renderer.listen('document', 'mouseup', () => {
+      onMove();
+      onUp();
+    });
   }
 
 }

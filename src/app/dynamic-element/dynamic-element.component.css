@@ -1,34 +1,27 @@
 .element {
   background-color: #0000FF;
 }
-.canvas {
-  width: 1500px;
-  height: 2000px;
-  border: 1px solid red;
+
+.bottom_right {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  cursor: pointer;
+  background-size: 15px;
+  background-image: url("../../assets/resize_icon.png");
+  background-repeat: no-repeat;
+  left: 100%;
+  top: 100%;
 }
-.resize {
-  background: red;
+.rotate {
   width: 15px;
   height: 15px;
   border-radius: 50%;
+  cursor: pointer;
   position: absolute;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-.rotate {
-  border: solid 1px cyan;
-  border-radius: 30px;
-  margin-top: 10px;
-  width: 25px;
-  height: 20px;
-}
-
-.br {
-  left: calc(100% - 7px);
-  top: calc(100% - 7px);
-}
-.rotator {
-  top: -45px;
+  background-color: #03a9f7;
+  top: -25px;
   left: calc(50% - 7px);
 }
